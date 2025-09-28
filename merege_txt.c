@@ -7,18 +7,16 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-
 int txtfile(const char *filename) {
     int len = strlen(filename);
-
-    if (len > 4 && strcmp(filename + len - 4, ".txt") == 0) {
+ if (len > 4 && strcmp(filename + len - 4, ".txt") == 0) {
         return 1; }
     return 0;
 }
 
 int main(int argc, char *argv[]) {
 
-    if (argc != 3) {
+   if (argc != 3) {
       printf("사용법: %s <원본_디렉터리> <결과_파일>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
@@ -35,8 +33,7 @@ int main(int argc, char *argv[]) {
         printf("원본 디렉터리를 열 수 없습니다");
         exit(EXIT_FAILURE);}
 
-
-    output_fd = open(output_file_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+   output_fd = open(output_file_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (output_fd == -1) {
         printf("결과 파일을 열 수 없습니다");
         closedir(dir_stream);
@@ -48,11 +45,12 @@ int main(int argc, char *argv[]) {
     while ((dir_entry = readdir(dir_stream)) != NULL) {
 
         if (txtfile(dir_entry->d_name)) {
+
             char source_file_path[1024];
 
             snprintf(source_file_path, sizeof(source_file_path), "%s/%s", source_directory_path, dir_entry->d_name);
 
-            printf("-> 처리 중인 파일: %s\n", source_file_path);
+            printf("처리 파일: %s\n", source_file_path);
 
 
             int input_fd = open(source_file_path, O_RDONLY);
@@ -82,16 +80,14 @@ int main(int argc, char *argv[]) {
                 printf("파일을 읽는 중 문제가 발생했습니다");
             }
 
-
-            close(input_fd);
-        }
-    }
+           close(input_fd);
+   }
+}
 
     printf("결과가 '%s' 파일에 저장되었습니다.\n", output_file_path);
 
-
-    closedir(dir_stream);
-    close(output_fd);
+   closedir(dir_stream);
+   close(output_fd);
 
     return 0;
 }
